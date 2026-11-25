@@ -9,3 +9,9 @@ Ramesh supplied the repository instructions in [AGENTS.md](AGENTS.md) and asked:
 > Looks like you started the app in 5103 and I am unable to verify the startup. Stop the ChatApp instance you started on port 5103. Confirm that port 5103 is free. For future milestones, stop any server you start for verification before handing control back to me.
 
 > Verified that I am also able to run the server. You can commit the changes. For commit massages make a note to use style, "Milestone <i>: <milestone objective>. After commit proceed to implement milestone 2
+
+## Milestone 2
+
+> Can you add in Readme.md the assumption that we made about normalizing name. We made a decision to treat names that different only in case or space as same user. Also in the Data definition, add a brief comment about why we are using normalized name
+
+> Can we also have the db name information in appsettings, rather than hardcoded in program.cs
