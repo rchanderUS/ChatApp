@@ -12,7 +12,8 @@ public sealed class ChatService(ChatDbContext database)
     private const int PageSize = 50;
     private const int SqliteUniqueConstraint = 2067;
 
-    public async Task<User> JoinAsync(string? name, CancellationToken cancellationToken = default)
+    public async Task<User> JoinAsync(
+        string? name, CancellationToken cancellationToken = default, int? boundUserId = null)
     {
         var displayName = name?.Trim();
         if (string.IsNullOrEmpty(displayName) || displayName.Length > MaxDisplayNameLength)
@@ -23,6 +24,11 @@ public sealed class ChatService(ChatDbContext database)
         var normalizedName = displayName.ToLowerInvariant();
         var existingUser = await database.Users.SingleOrDefaultAsync(
             user => user.NormalizedName == normalizedName, cancellationToken);
+        if (boundUserId.HasValue && existingUser?.Id != boundUserId)
+        {
+            throw new ArgumentException("This connection is already joined as another user.");
+        }
+
         if (existingUser is not null)
         {
             return existingUser;
@@ -49,6 +55,14 @@ public sealed class ChatService(ChatDbContext database)
             return await database.Users.SingleAsync(
                 user => user.NormalizedName == normalizedName, cancellationToken);
         }
+    }
+
+    public Task<List<KnownUser>> GetUsersAsync(CancellationToken cancellationToken = default)
+    {
+        return database.Users.AsNoTracking()
+            .OrderBy(user => user.Id)
+            .Select(user => new KnownUser(user.Id, user.DisplayName))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<ChatMessage> SaveMessageAsync(

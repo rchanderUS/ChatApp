@@ -64,6 +64,22 @@ public sealed class ChatServiceTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task BoundJoinAcceptsSameIdentityAndRejectsSwitchWithoutCreatingUser()
+    {
+        await using var database = CreateContext();
+        var service = new ChatService(database);
+        var first = await service.JoinAsync("DJ");
+        var other = await service.JoinAsync("Other");
+
+        Assert.Equal(first.Id, (await service.JoinAsync(" dj ", boundUserId: first.Id)).Id);
+        await Assert.ThrowsAsync<ArgumentException>(() => service.JoinAsync("Other", boundUserId: first.Id));
+        await Assert.ThrowsAsync<ArgumentException>(() => service.JoinAsync("New", boundUserId: first.Id));
+
+        Assert.Equal(new[] { new KnownUser(first.Id, "DJ"), new KnownUser(other.Id, "Other") },
+            await service.GetUsersAsync());
+    }
+
+    [Fact]
     public async Task OverlappingJoinsResolveToOnePersistedUser()
     {
         var pause = new PauseBeforeSave();

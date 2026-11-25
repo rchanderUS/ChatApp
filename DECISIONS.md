@@ -64,3 +64,16 @@
 
 - Each test creates its schema in a fresh context over an open in-memory SQLite connection. The race test shares that connection across two contexts and pauses the first save so SQLite's unique index rejects the second insert attempt for the same name.
 - All 21 tests passed, including 13 ChatService cases and 8 PresenceTracker cases. The service tests cover normalized and overlapping joins, validation, persisted message metadata, and history cursors.
+
+## Milestone 5
+
+- Map `ChatHub` at `/chat`. All connections can request the roster and receive `PresenceChanged`. Only joined connections can request history, send messages, or receive `MessageReceived` through the joined group.
+- Resolve the sender from the connection binding. Reject an identity switch before it can create a user. Save messages before broadcasting so the live event and history carry the same generated ID, author, and timestamp.
+- Capture the presence revision before querying known users. A newer event can supersede the snapshot for that user, including when the user was created during the query.
+
+### Verification
+
+- All 22 xUnit tests passed, including a new test for idempotent rejoin and identity switch rejection without creating another user.
+- Four .NET SignalR clients verified the visitor roster and revisioned presence events, joined-only message delivery, sender and peer payloads matching persisted history, and client errors for invalid or unauthorized calls.
+- The two-tab check verified that closing the first connection keeps the user online and closing the last one sends the offline transition. The start page returned HTTP 200.
+- Stopped the verification server and confirmed ports 5103 and 15103 were free on IPv4 and IPv6 loopback. Browser rendering, reconnect recovery, and abrupt disconnect detection remain unverified.

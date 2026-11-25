@@ -1,4 +1,5 @@
 using ChatApp.Data;
+using ChatApp.Hubs;
 using ChatApp.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ var connectionString = new SqliteConnectionStringBuilder
 builder.Services.AddDbContext<ChatDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddSingleton<PresenceTracker>();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -30,5 +32,6 @@ await using (var scope = app.Services.CreateAsyncScope())
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
+app.MapHub<ChatHub>("/chat");
 
 app.Run();
