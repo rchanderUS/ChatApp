@@ -67,3 +67,11 @@ Ramesh supplied the repository instructions in [AGENTS.md](AGENTS.md) and asked:
 > Verified. Commit the code and implement milestone 6. Please note that the current implementation gets its own message back and if you are already showing the message the client sent, it will result in message displayed twice
 
 > Can you document the decision that was made that older history is paged on the server, but loaded messages accumulate in the browser. `renderMessages()` sorts and rebuilds the rendered list on each incoming message. That’s a reasonable tradeoff for the exercise. A long-running session could eventually benefit from incremental rendering or a windowed list.
+
+## Milestone 7
+
+> Commit code for milestone 6. Implement milestone 7
+
+## Milestone 8
+
+> ChatApp is coded and tested. Good. Update the final documentation required in milestone 8. Will review and then we should be ready to push

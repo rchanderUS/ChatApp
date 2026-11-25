@@ -116,6 +116,7 @@ public sealed class ChatServiceTests : IAsyncLifetime
         var service = new ChatService(database);
         var author = await service.JoinAsync("DJ");
 
+        await Assert.ThrowsAsync<ArgumentException>(() => service.SaveMessageAsync(author.Id, ""));
         await Assert.ThrowsAsync<ArgumentException>(() => service.SaveMessageAsync(author.Id, " \t "));
         await Assert.ThrowsAsync<ArgumentException>(() => service.SaveMessageAsync(author.Id, new string('x', 2_001)));
         var text = new string('x', 2_000);

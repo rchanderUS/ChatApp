@@ -40,16 +40,16 @@ Read `ASSIGNMENT.md` in the repository root. It defines the submission requireme
 
 ## Build and commit order
 
-Use `Milestone <i>: <milestone objective>` for commit messages. After verification, stop any server you started and confirm its port is free before handing control back.
+Use `Milestone <n>: <milestone objective>` for commit messages. After verification, stop any server you started and confirm its port is free before handing control back.
 
-1. `chore: scaffold solution and project notes`
-2. `feat: add SQLite user and message persistence`
-3. `feat: implement normalized joins and paged history`
-4. `feat: track active connections and presence transitions`
-5. `feat: wire SignalR chat and presence events`
-6. `feat: add browser UI and reconnect recovery`
-7. `test: verify chat scenarios and record results`
-8. `docs: describe setup, design decisions, and tradeoffs`
+1. `Milestone 1: scaffold solution and project notes`
+2. `Milestone 2: add SQLite user and message persistence`
+3. `Milestone 3: implement normalized joins and paged history`
+4. `Milestone 4: track active connections and presence transitions`
+5. `Milestone 5: wire SignalR chat and presence events`
+6. `Milestone 6: add browser UI and reconnect recovery`
+7. `Milestone 7: verify chat scenarios and record results`
+8. `Milestone 8: describe setup, design decisions, and tradeoffs`
 
 Work only on the requested milestone. Keep the application runnable after each milestone. Report what changed, what you verified, and what remains unverified. Pause for Ramesh to review before committing.
 
