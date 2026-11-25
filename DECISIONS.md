@@ -29,3 +29,19 @@
 - Browser-driven restart recovery, normalized joins, and history paging remain pending. The restart check exercised persistence through EF Core.
 - A startup test with `Database:FileName` set to `configured.db` created that file under a temporary content root and returned HTTP 200. The test server was stopped and both ports were free on IPv4 loopback.
 - Ramesh verified the milestone and approved the commit.
+
+## Milestone 3
+
+- Keep name matching, message validation and persistence, and history queries in the scoped `ChatService`. The first persisted display name supplies the casing for later joins.
+- Enforce length limits on the server after trimming surrounding whitespace. Display names are capped at 50 characters and messages at 2,000 characters.
+- Let SQLite arbitrate concurrent inserts. An extended error code of `2067` signals a uniqueness violation. The normalized-name index is the only unique index on `Users`. On that error, detach the failed entity and reload the winning row.
+- Use exclusive message ID cursors and fetch at most 51 rows to determine whether another 50-message page is available. Return every page in ascending ID order.
+
+### Verification
+
+- The solution built with zero warnings and errors. The start page returned HTTP 200.
+- A temporary integration harness paused one join after lookup, let a second context insert `DJ` into the same SQLite file, then resumed the first join. `DJ`, ` dj `, and `dj` returned the same ID and display casing, with one persisted row.
+- Verified whitespace rejection, the 50-character name limit, and the 2,000-character trimmed message limit. Saved messages included the author and a UTC timestamp.
+- With 121 saved messages, verified newest, older, and forward pages, including cursor exclusion, ascending order, empty results, and the flag indicating more rows.
+- Stopped the verification server and confirmed that ports 5103 and 15103 were free on IPv4 and IPv6 loopback.
+- Browser-driven joins, live delivery, and reconnect recovery remain pending. History paging was verified at the service level with 121 rows.

@@ -1,4 +1,5 @@
 using ChatApp.Data;
+using ChatApp.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ var connectionString = new SqliteConnectionStringBuilder
     ForeignKeys = true
 }.ToString();
 builder.Services.AddDbContext<ChatDbContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddScoped<ChatService>();
 
 var app = builder.Build();
 

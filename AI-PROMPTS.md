@@ -15,3 +15,14 @@ Ramesh supplied the repository instructions in [AGENTS.md](AGENTS.md) and asked:
 > Can you add in Readme.md the assumption that we made about normalizing name. We made a decision to treat names that different only in case or space as same user. Also in the Data definition, add a brief comment about why we are using normalized name
 
 > Can we also have the db name information in appsettings, rather than hardcoded in program.cs
+
+## Milestone 3
+
+> Verified. Go ahead and commit. Implement Milestone 3
+
+> Extract the validation limits into public constants on ChatService: MaxDisplayNameLength = 50 and MaxMessageLength = 2000, alongside the existing PageSize. Use them in the length checks and interpolate them into the exception messages so the text can never drift from the values. Then add both limits to the Assumptions section of the README and to DECISIONS.md as explicit decisions:
+> Names capped at 50 chars, Messages at 2,000 chars, enforced server-side
+
+> In JoinAsync, I would prefer to rely only on SqliteExtendedErrorCode == 2067 (SQLITE_CONSTRAINT_UNIQUE). Remove the sqlite.Message.Contains(...) check — matching on error-message text is fragile across SQLite versions, and the extended error code already says exactly which constraint fired. Keep the detach-and-reread fallback as is.
+
+> In SaveMessageAsync, SingleAsync on the author throws a InvalidOperationException if the userId doesn't exist. Replace it with a lookup that throws ArgumentException("Unknown user.") when the author is missing, so the hub can surface a clean client error instead of a 500.
