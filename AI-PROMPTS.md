@@ -26,3 +26,11 @@ Ramesh supplied the repository instructions in [AGENTS.md](AGENTS.md) and asked:
 > In JoinAsync, I would prefer to rely only on SqliteExtendedErrorCode == 2067 (SQLITE_CONSTRAINT_UNIQUE). Remove the sqlite.Message.Contains(...) check — matching on error-message text is fragile across SQLite versions, and the extended error code already says exactly which constraint fired. Keep the detach-and-reread fallback as is.
 
 > In SaveMessageAsync, SingleAsync on the author throws a InvalidOperationException if the userId doesn't exist. Replace it with a lookup that throws ArgumentException("Unknown user.") when the author is missing, so the hub can surface a clean client error instead of a 500.
+
+## Milestone 4
+
+> Go ahead and commit milestone 3. Implement milestone 4
+
+> I see you implemented the presence revision. Add a short entry to DECISIONS.md: presence is tracked as connection counts per user in memory; clients receive transitions only on status flips, each carrying a monotonically increasing revision; a snapshot (revision + online set) lets a client resync if it detects a gap. Note the tradeoff: state is per-server and lost on restart, by design — presence is derived from live connections, never persisted.
+
+> Write unit tests for PresenceTracker covering: first connection for a user returns an online transition; a second connection for the same user returns null; removing one of two connections returns null and the user stays in the snapshot; removing the last connection returns an offline transition; removing an unknown connection returns null; re-adding the same connection for the same user is a no-op; adding the same connection for a different user throws; snapshot revision increases only on transitions.

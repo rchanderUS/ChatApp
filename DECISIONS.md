@@ -45,3 +45,17 @@
 - With 121 saved messages, verified newest, older, and forward pages, including cursor exclusion, ascending order, empty results, and the flag indicating more rows.
 - Stopped the verification server and confirmed that ports 5103 and 15103 were free on IPv4 and IPv6 loopback.
 - Browser-driven joins, live delivery, and reconnect recovery remain pending. History paging was verified at the service level with 121 rows.
+
+## Milestone 4
+
+- Track presence per server in memory using each user's active connection count. Maintain both connection-to-user and user-to-connections indexes under one lock. Once SignalR is wired up, clients will receive transitions only when a user goes online or offline, each with a monotonically increasing revision. A snapshot includes the current revision and the set of online user IDs so a client can resync if it detects a gap.
+- Presence resets on server restart by design. It is derived from live connections, never persisted, and rebuilt as clients rejoin.
+
+### Verification
+
+- All eight PresenceTracker unit tests passed with `dotnet test ChatApp.slnx`.
+- Built with zero warnings and errors. The start page returned HTTP 200.
+- A temporary harness verified that closing one of two connections keeps the user online and that removing the last connection returns an offline transition. It also checked duplicate joins, identity switch rejection, and snapshot isolation.
+- Adding and removing 100 connections in parallel produced exactly one online and one offline transition for the user, with increasing revisions and no remaining connection bindings.
+- Stopped the verification server and confirmed ports 5103 and 15103 were free on IPv4 and IPv6 loopback.
+- SignalR broadcasts, browser presence updates, and abrupt disconnect recovery remain pending.

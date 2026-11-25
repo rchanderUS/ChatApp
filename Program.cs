@@ -18,6 +18,7 @@ var connectionString = new SqliteConnectionStringBuilder
 }.ToString();
 builder.Services.AddDbContext<ChatDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddScoped<ChatService>();
+builder.Services.AddSingleton<PresenceTracker>();
 
 var app = builder.Build();
 

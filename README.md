@@ -1,6 +1,6 @@
 # ChatApp
 
-ChatApp is a single shared chat room in development. Milestone 3 adds name matching, message validation, and history paging in the application service. The browser still serves the static start page.
+ChatApp is a single shared chat room in development. The server includes name matching, message validation, history paging, and in-memory connection tracking. The browser serves the static start page.
 
 ## Run locally
 
@@ -20,7 +20,7 @@ The server caps display names at 50 characters and messages at 2,000 characters 
 
 ## Design
 
-EF Core manages the SQLite schema. A user has a display name, a unique normalized name, and a creation timestamp. A message has an author, text, and a send timestamp. SQLite generates IDs for both. Visitors will see the roster before joining by name, and ASP.NET Core SignalR will deliver messages and updates based on active connections. [Implementation decisions](DECISIONS.md)
+EF Core manages the SQLite schema. A user has a display name, a unique normalized name, and a creation timestamp. A message has an author, text, and a send timestamp. SQLite generates IDs for both. The presence tracker keeps each user's active connections in memory. The first connection marks the user online, and the last removal marks them offline. Visitors will see the roster before joining by name, and ASP.NET Core SignalR will deliver messages and presence updates. [Implementation decisions](DECISIONS.md)
 
 ## AI usage
 
