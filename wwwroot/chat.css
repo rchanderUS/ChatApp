@@ -1,0 +1,59 @@
+body {
+    font: 1rem/1.5 system-ui, sans-serif;
+    margin: 1rem;
+}
+
+main {
+    max-width: 60rem;
+    margin: auto;
+}
+
+.room {
+    display: grid;
+    grid-template-columns: minmax(9rem, 1fr) minmax(0, 3fr);
+    gap: 1rem;
+}
+
+#messages {
+    list-style: none;
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    border: 1px solid #767676;
+    height: clamp(12rem, 50vh, 32rem);
+    overflow: auto;
+}
+
+#messages li + li {
+    margin-top: 0.75rem;
+}
+
+#messages p {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+#users, #messages {
+    overflow-wrap: anywhere;
+}
+
+time {
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+}
+
+textarea {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+#error {
+    color: #a21b1b;
+}
+
+@media (max-width: 36rem) {
+    .room {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

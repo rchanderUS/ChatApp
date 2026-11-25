@@ -4,11 +4,37 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chat App</title>
+    <link rel="stylesheet" href="chat.css">
+    <script src="lib/signalr/10.0.11/signalr.min.js" defer></script>
+    <script src="chat.js" defer></script>
 </head>
 <body>
     <main>
         <h1>Chat App</h1>
-        <p>The chat room is under development.</p>
+        <p id="connection-status" role="status">Connecting…</p>
+        <button id="reconnect" type="button" hidden>Reconnect</button>
+        <form id="join-form">
+            <label for="display-name">Display name</label>
+            <input id="display-name" required disabled>
+            <button id="join" disabled>Join</button>
+        </form>
+        <p id="error" role="alert" hidden></p>
+        <div class="room">
+            <aside aria-labelledby="roster-heading">
+                <h2 id="roster-heading">Users</h2>
+                <ul id="users"></ul>
+            </aside>
+            <section id="chat" aria-labelledby="messages-heading" hidden>
+                <h2 id="messages-heading">Messages</h2>
+                <button id="load-older" type="button" hidden>Load older messages</button>
+                <ol id="messages" aria-label="Chat history" tabindex="0"></ol>
+                <form id="send-form">
+                    <label for="message-text">Message</label>
+                    <textarea id="message-text" rows="2" required disabled></textarea>
+                    <button id="send" disabled>Send</button>
+                </form>
+            </section>
+        </div>
     </main>
 </body>
 </html>

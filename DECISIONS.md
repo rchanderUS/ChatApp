@@ -77,3 +77,19 @@
 - Four .NET SignalR clients verified the visitor roster and revisioned presence events, joined-only message delivery, sender and peer payloads matching persisted history, and client errors for invalid or unauthorized calls.
 - The two-tab check verified that closing the first connection keeps the user online and closing the last one sends the offline transition. The start page returned HTTP 200.
 - Stopped the verification server and confirmed ports 5103 and 15103 were free on IPv4 and IPv6 loopback. Browser rendering, reconnect recovery, and abrupt disconnect detection remain unverified.
+
+## Milestone 6
+
+- Serve the pinned SignalR browser bundle locally with its license. Keep the browser client in vanilla JavaScript and render chat data as text.
+- Register event handlers before starting SignalR. A roster snapshot supplies a revision baseline, and newer per-user events take precedence. A detected revision gap triggers a fresh snapshot. Reconnect resets the baseline so a restarted server can begin at revision zero.
+- Merge saved messages from the hub and from history by database ID. The send form relies on the server echo for display. Catch-up starts at the last covered ID and advances from fetched pages even as newer live messages arrive. The older-history cursor stays independent.
+- Page older history on the server and keep loaded messages in browser memory for the session. On each new message, `renderMessages()` sorts the loaded messages by ID and rebuilds the rendered list. This keeps rendering straightforward for the exercise. Long-running sessions could benefit from incremental rendering or a windowed list.
+- Save the joined display name in session storage. Refresh loads the newest page, while reconnect rejoins and catches up. Sending stays disabled until recovery completes. A failed startup or exhausted automatic reconnect shows a manual reconnect action.
+
+### Verification
+
+- In two independent Chrome sessions, verified the visitor roster, live delivery, author and timestamp, and a single sender echo. HTML-like message text rendered literally.
+- Refresh restored the joined display name and loaded the newest 50 messages. Loading older history showed all 67 messages in order with no duplicates.
+- Forced one browser connection offline while the other sent 65 messages. A new live message arrived during catch-up and also appeared in fetched history. The recovered list contained every message exactly once, in ID order.
+- Blocked initial startup and verified that the Reconnect button restored visitor access after the connection became available.
+- Stopped the test server and confirmed ports 5103 and 15103 were free on IPv4 and IPv6 loopback. Browser recovery across a server restart, server-side timeout detection after silent network loss, and retry exhaustion remain unverified.
