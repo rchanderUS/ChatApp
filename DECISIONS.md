@@ -59,3 +59,8 @@
 - Adding and removing 100 connections in parallel produced exactly one online and one offline transition for the user, with increasing revisions and no remaining connection bindings.
 - Stopped the verification server and confirmed ports 5103 and 15103 were free on IPv4 and IPv6 loopback.
 - SignalR broadcasts, browser presence updates, and abrupt disconnect recovery remain pending.
+
+## ChatService test follow-up
+
+- Each test creates its schema in a fresh context over an open in-memory SQLite connection. The race test shares that connection across two contexts and pauses the first save so SQLite's unique index rejects the second insert attempt for the same name.
+- All 21 tests passed, including 13 ChatService cases and 8 PresenceTracker cases. The service tests cover normalized and overlapping joins, validation, persisted message metadata, and history cursors.

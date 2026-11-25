@@ -34,3 +34,26 @@ Ramesh supplied the repository instructions in [AGENTS.md](AGENTS.md) and asked:
 > I see you implemented the presence revision. Add a short entry to DECISIONS.md: presence is tracked as connection counts per user in memory; clients receive transitions only on status flips, each carrying a monotonically increasing revision; a snapshot (revision + online set) lets a client resync if it detects a gap. Note the tradeoff: state is per-server and lost on restart, by design — presence is derived from live connections, never persisted.
 
 > Write unit tests for PresenceTracker covering: first connection for a user returns an online transition; a second connection for the same user returns null; removing one of two connections returns null and the user stays in the snapshot; removing the last connection returns an offline transition; removing an unknown connection returns null; re-adding the same connection for the same user is a no-op; adding the same connection for a different user throws; snapshot revision increases only on transitions.
+
+## ChatService test follow-up
+
+> You can commit milestone 4. Afterwards can you also add test cases for ChatServices, which we missed in milestone 3.  Add unit tests for ChatService, using EF Core with a shared in-memory SQLite connection (Data Source=:memory:, kept open for the test run) — NOT the EF in-memory provider, which does not enforce unique constraints. Create the schema per test with EnsureCreated on a fresh context. Cover:
+>
+> Join:
+> - joining as "DJ", then "dj", then " DJ " returns the same user with the first-seen display casing ("DJ") and creates exactly one Users row
+> - joining twice with the same name returns the same user Id
+> - empty, whitespace-only, and 51-character names throw ArgumentException
+> - race: two concurrent joins for the same name, using separate DbContext instances over the shared connection, result in one Users row and both callers get the same user Id
+>
+> SaveMessage:
+> - whitespace-only and 2,001-character messages throw ArgumentException; a 2,000-character message is accepted
+> - a saved message is persisted with the author's display name, a server timestamp close to now, and an Id
+> - saving for a non-existent user throws ArgumentException ("Unknown user.")
+>
+> GetHistory:
+> - with 55 seeded messages, the first page returns the latest 50 in chronological order with HasMore = true
+> - a beforeId page returns the older messages, chronological, HasMore = false
+> - an afterId page returns only newer messages, ascending
+> - passing both beforeId and afterId throws ArgumentException
+
+> Commit this as Milestone 3. Adding unit tests. Make a note to add unit tests for future service classes

@@ -55,6 +55,8 @@ Work only on the requested milestone. Keep the application runnable after each m
 
 ## Verification
 
+- Add unit tests for future service classes as part of the milestone that introduces them.
+
 - Verify that `DJ`, ` dj `, and `dj` resolve to one user and preserve the original display casing. Test overlapping joins with separate DbContext instances against the same SQLite database and assert one row and one returned identity.
 - Check the message size boundaries and whitespace-only rejection. Verify multi-connection presence, including that removing the last connection emits the offline transition.
 - In two independent browser sessions, verify that an unjoined visitor sees the initial roster and live presence changes. Join both sessions and check live messages with author and timestamp.
